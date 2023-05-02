@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-  useEffect,
-} from "react";
+import { createContext, useState, useContext, ReactNode } from "react";
 
 import { CreateUserInput, apiClient, createUser } from "../api/ApiClient";
 import { useRouter } from "next/router";
