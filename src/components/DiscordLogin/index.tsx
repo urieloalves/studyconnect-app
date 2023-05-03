@@ -18,7 +18,7 @@ export default function DiscordLogin() {
         colorScheme="purple"
         width="full"
       >
-        Discord Authentication
+        Login with Discord
       </Button>
     </>
   );
