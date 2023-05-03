@@ -29,7 +29,7 @@ export default function Login() {
     <Flex h="fit-content" justify="center">
       <Box mt="60px" p={6} rounded="md" w="fit-content">
         <form onSubmit={formik.handleSubmit}>
-          <VStack spacing={4} align="flex-start">
+          <VStack spacing={4} align="flex-start" w="250px">
             <FormControl>
               <FormLabel htmlFor="email">Email</FormLabel>
               <Input
@@ -58,7 +58,7 @@ export default function Login() {
               Login
             </Button>
 
-            <DiscordLogin />
+            <DiscordLogin label="Login with Discord" />
 
             <Text>
               New? <Link href="/register">Create an account?</Link>
