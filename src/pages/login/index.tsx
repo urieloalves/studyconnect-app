@@ -26,8 +26,8 @@ export default function Login() {
   });
 
   return (
-    <Flex bg="gray.100" align="center" justify="center" h="100vh">
-      <Box bg="white" p={6} rounded="md">
+    <Flex h="fit-content" justify="center">
+      <Box mt="60px" p={6} rounded="md" w="fit-content">
         <form onSubmit={formik.handleSubmit}>
           <VStack spacing={4} align="flex-start" w="250px">
             <FormControl>

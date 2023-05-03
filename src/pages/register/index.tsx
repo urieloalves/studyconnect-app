@@ -3,8 +3,8 @@ import { Box, Flex } from "@chakra-ui/react";
 
 export default function Register() {
   return (
-    <Flex bg="gray.100" align="center" justify="center" h="100vh">
-      <Box bg="white" p={6} rounded="md">
+    <Flex h="fit-content" justify="center">
+      <Box mt="60px" p={6} rounded="md" w="fit-content">
         <DiscordLogin label="Register using Discord" />
       </Box>
     </Flex>
