@@ -2,7 +2,7 @@ import { discordOAuth } from "@/api/ApiClient";
 import { Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
-export default function DiscordLogin() {
+export default function DiscordLogin({ label }: { label: string }) {
   const router = useRouter();
 
   async function handleClick() {
@@ -18,7 +18,7 @@ export default function DiscordLogin() {
         colorScheme="purple"
         width="full"
       >
-        Login with Discord
+        {label}
       </Button>
     </>
   );
