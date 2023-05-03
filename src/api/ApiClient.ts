@@ -11,6 +11,23 @@ export async function discordOAuth(): Promise<{redirectUrl: string}> {
   }
 }
 
+export async function getUser(): Promise<{
+  id: string,
+  name: string,
+  email: string,
+}> {
+  const response = await apiClient.get<{
+    id: string,
+    name: string,
+    email: string,
+  }>("/users/me")
+  return {
+    id: response.data.id,
+    name: response.data.name,
+    email: response.data.email,
+  }
+}
+
 export type CreateUserInput = {
   name: string
   email: string
@@ -21,6 +38,18 @@ export type CreateUserInput = {
 
 export async function createUser(input: CreateUserInput): Promise<{token: string}> {
   const response = await apiClient.post<{access_token: string}>("/users", input)
+  return {
+    token: response.data.access_token
+  }
+}
+
+export type GetAccessTokenInput = {
+  email: string
+  password: string
+}
+
+export async function getAccessToken(input: GetAccessTokenInput): Promise<{token: string}> {
+  const response = await apiClient.post<{access_token: string}>("/users/generate_token", input)
   return {
     token: response.data.access_token
   }
