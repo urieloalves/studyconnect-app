@@ -1,6 +1,13 @@
 import { createContext, useState, useContext, ReactNode } from "react";
 
-import { CreateUserInput, apiClient, createUser } from "../api/ApiClient";
+import {
+  CreateUserInput,
+  apiClient,
+  createUser,
+  getUser as apiGetUser,
+  GetAccessTokenInput,
+  getAccessToken as apiGetAccessToken,
+} from "../api/ApiClient";
 import { useRouter } from "next/router";
 import { useLocalStorage } from "./useLocalStorage";
 
@@ -10,7 +17,10 @@ interface AuthState {
 
 interface AuthContextData {
   token: string | null;
-  registerUser(data: CreateUserInput): void;
+  registerUser(input: CreateUserInput): void;
+  getUser(): void;
+  addTokenToHeader(token: string): void;
+  getAccessToken(input: GetAccessTokenInput): void;
 }
 
 interface AuthProviderProps {
@@ -36,8 +46,20 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   });
   const router = useRouter();
 
-  async function registerUser(data: CreateUserInput) {
-    const { token } = await createUser(data);
+  async function registerUser(input: CreateUserInput) {
+    const { token } = await createUser(input);
+    setToken(token);
+    addTokenToHeader(token);
+    router.push("/");
+  }
+
+  async function getUser() {
+    const data = await apiGetUser();
+    console.log(data);
+  }
+
+  async function getAccessToken(input: GetAccessTokenInput) {
+    const { token } = await apiGetAccessToken(input);
     setToken(token);
     addTokenToHeader(token);
     router.push("/");
@@ -51,7 +73,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         token: data.token,
-        registerUser: registerUser,
+        registerUser,
+        getUser,
+        addTokenToHeader,
+        getAccessToken,
       }}
     >
       {children}
