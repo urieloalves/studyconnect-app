@@ -7,12 +7,15 @@ import { useState } from "react";
 import { Group } from "@/models";
 import { GroupCard } from "@/components/GroupCard";
 import { useRouter } from "next/router";
+import { useModal } from "@/hooks/useModal";
+import { CreateGroup } from "@/components/CreateGroup";
 
 export default function Search() {
   const [search, setSearch] = useState<string>("");
   const [groups, setGroups] = useState<Group[]>([]);
   const { user } = useAuth();
   const router = useRouter();
+  const { openModal } = useModal();
 
   return (
     <Flex
@@ -35,7 +38,7 @@ export default function Search() {
             w="300px"
             mr="20px"
           />
-          <Button onClick={() => console.log("create group")}>
+          <Button onClick={() => openModal(<CreateGroup />)}>
             Create group
           </Button>
         </Flex>

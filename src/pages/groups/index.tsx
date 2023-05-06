@@ -1,9 +1,12 @@
+import { CreateGroup } from "@/components/CreateGroup";
+import { useModal } from "@/hooks/useModal";
 import { SearchIcon } from "@chakra-ui/icons";
 import { Button, Flex, Stack, Text, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 export default function Groups() {
   const router = useRouter();
+  const { openModal } = useModal();
 
   const groups: any[] = [];
 
@@ -30,7 +33,7 @@ export default function Groups() {
             </Tooltip>
           </Button>
 
-          <Button onClick={() => console.log("Create group")}>
+          <Button onClick={() => openModal(<CreateGroup />)}>
             Create group
           </Button>
         </Flex>
