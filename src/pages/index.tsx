@@ -1,9 +1,15 @@
+import { useAuth } from "@/hooks/useAuth";
 import { Flex, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 export default function Home() {
   const router = useRouter();
+  const { token } = useAuth();
+
+  if (token) {
+    router.push("/groups");
+  }
   return (
     <Flex ml="20vw" mt="20vh" direction="column">
       <Text fontSize="40px">

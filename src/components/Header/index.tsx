@@ -26,7 +26,7 @@ export function Header() {
         fontWeight="700"
         mr="20px"
         cursor="pointer"
-        onClick={() => router.push("/")}
+        onClick={() => router.push(token ? "/groups" : "/")}
       >
         StudyConnect
       </Text>

@@ -13,7 +13,8 @@ export default function Access() {
 
     updateToken(newToken as string);
     getUser();
-  }, [router.query, getUser, updateToken, token]);
+    router.push("/groups");
+  }, [router.query, getUser, updateToken, token, router]);
 
   return (
     <>
