@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, ReactNode } from "react";
+import { createContext, useContext, ReactNode, useEffect } from "react";
 
 import {
   CreateUserInput,
@@ -17,14 +17,9 @@ type User = {
   name: string;
 };
 
-interface AuthState {
-  token: string | null;
-  user: User;
-}
-
 interface AuthContextData {
   token: string | null;
-  user: User;
+  user: User | null;
   registerUser(input: CreateUserInput): void;
   getUser(): void;
   getAccessToken(input: GetAccessTokenInput): void;
@@ -46,17 +41,16 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     null
   );
 
+  useEffect(() => {
+    if (storageToken) {
+      addTokenToHeader(storageToken);
+    }
+  }, [storageToken]);
+
   const [storageUser, setStorageUser] = useLocalStorage<User | null>(
     STORAGE_KEY_USER,
     null
   );
-
-  const [data, setData] = useState<AuthState>(() => {
-    if (storageToken) {
-      addTokenToHeader(storageToken);
-    }
-    return { token: storageToken, user: storageUser } as AuthState;
-  });
 
   const router = useRouter();
 
@@ -80,12 +74,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   function updateToken(token: string) {
     addTokenToHeader(token);
     setStorageToken(token);
-    setData((data) => ({ ...data, token }));
   }
 
   function setUser(user: User) {
     setStorageUser(user);
-    setData((data) => ({ ...data, user }));
   }
 
   function addTokenToHeader(token: string) {
@@ -95,8 +87,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
-        token: data.token,
-        user: data.user,
+        token: storageToken,
+        user: storageUser,
         registerUser,
         getUser,
         getAccessToken,
