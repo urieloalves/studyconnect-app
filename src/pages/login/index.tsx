@@ -14,7 +14,7 @@ import DiscordLogin from "@/components/DiscordLogin";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Login() {
-  const { getAccessToken } = useAuth();
+  const { getAccessToken, getUser } = useAuth();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -22,6 +22,7 @@ export default function Login() {
     },
     onSubmit: async (values) => {
       await getAccessToken(values);
+      await getUser();
     },
   });
 
