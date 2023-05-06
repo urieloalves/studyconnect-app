@@ -11,16 +11,24 @@ import {
 import { useRouter } from "next/router";
 import { useLocalStorage } from "./useLocalStorage";
 
+type User = {
+  id: string;
+  email: string;
+  name: string;
+};
+
 interface AuthState {
   token: string | null;
+  user: User;
 }
 
 interface AuthContextData {
   token: string | null;
+  user: User;
   registerUser(input: CreateUserInput): void;
   getUser(): void;
-  addTokenToHeader(token: string): void;
   getAccessToken(input: GetAccessTokenInput): void;
+  updateToken(token: string): void;
 }
 
 interface AuthProviderProps {
@@ -30,39 +38,54 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const STORAGE_KEY_TOKEN = "@studyconnect:token";
+const STORAGE_KEY_USER = "@studyconnect:user";
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [token, setToken] = useLocalStorage<string | null>(
+  const [storageToken, setStorageToken] = useLocalStorage<string | null>(
     STORAGE_KEY_TOKEN,
     null
   );
 
-  const [data, setData] = useState<AuthState>(() => {
-    if (token) {
-      addTokenToHeader(token);
-    }
+  const [storageUser, setStorageUser] = useLocalStorage<User | null>(
+    STORAGE_KEY_USER,
+    null
+  );
 
-    return { token } as AuthState;
+  const [data, setData] = useState<AuthState>(() => {
+    if (storageToken) {
+      addTokenToHeader(storageToken);
+    }
+    return { token: storageToken, user: storageUser } as AuthState;
   });
+
   const router = useRouter();
 
   async function registerUser(input: CreateUserInput) {
     const { token } = await createUser(input);
-    setToken(token);
-    addTokenToHeader(token);
+    updateToken(token);
     router.push("/");
   }
 
   async function getUser() {
-    const data = await apiGetUser();
-    console.log(data);
+    const user = await apiGetUser();
+    setUser(user);
   }
 
   async function getAccessToken(input: GetAccessTokenInput) {
     const { token } = await apiGetAccessToken(input);
-    setToken(token);
-    addTokenToHeader(token);
+    updateToken(token);
     router.push("/");
+  }
+
+  function updateToken(token: string) {
+    addTokenToHeader(token);
+    setStorageToken(token);
+    setData((data) => ({ ...data, token }));
+  }
+
+  function setUser(user: User) {
+    setStorageUser(user);
+    setData((data) => ({ ...data, user }));
   }
 
   function addTokenToHeader(token: string) {
@@ -73,10 +96,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         token: data.token,
+        user: data.user,
         registerUser,
         getUser,
-        addTokenToHeader,
         getAccessToken,
+        updateToken,
       }}
     >
       {children}

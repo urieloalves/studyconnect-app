@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const apiClient = axios.create({
-  baseURL: "http://localhost:3333",
+  baseURL: "http://localhost:3333/api/v1",
 });
 
 export async function discordOAuth(): Promise<{redirectUrl: string}> {
@@ -49,7 +49,7 @@ export type GetAccessTokenInput = {
 }
 
 export async function getAccessToken(input: GetAccessTokenInput): Promise<{token: string}> {
-  const response = await apiClient.post<{access_token: string}>("/users/generate_token", input)
+  const response = await apiClient.post<{access_token: string}>("/users/access-token", input)
   return {
     token: response.data.access_token
   }
