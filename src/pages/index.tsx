@@ -15,12 +15,7 @@ export default function Home() {
       <Text fontSize="40px">
         Connecting students <br /> from any online learning platform
       </Text>
-      <Button
-        mt="10px"
-        w="150px"
-        onClick={() => router.push("/login")}
-        colorScheme="purple"
-      >
+      <Button mt="10px" w="150px" onClick={() => router.push("/login")}>
         Login
       </Button>
     </Flex>
